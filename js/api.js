@@ -1,4 +1,4 @@
-const loadData = async() =>{
+const loadData = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/retro-forum/posts')
     const data = await res.json()
     const allPost = data.posts
@@ -6,21 +6,23 @@ const loadData = async() =>{
 }
 
 const allPostContainer = document.getElementById('all-posts-Container')
- function displayAllpost(allPost){
+function displayAllpost(allPost) {
     console.log(allPost)
-    allPost.forEach ((allPost) => {
+    allPost.forEach((allPost) => {
         const newDiv = document.createElement('div')
-    newDiv.innerHTML = `
+        newDiv.innerHTML = `
     <div class="lg:flex lg:justify-around p-2 lg:p-10 bg-[#797DFC1A] rounded-lg">
-       <div class="w-1/2 lg:w-1/6"> <img class="" src="${allPost.image}" alt=""></div>
-       <div class="">
+       <div class="w-1/2 lg:w-1/4 indicator"> <span id="indicator-up" class="indicator-item badge bg-green-700"></span> 
+        <img class="" src="${allPost.image}" alt="">
+        </div>
+       <div class="lg:w-2/3">
            <div class="space-y-3">
                <div class="flex gap-7 text-[#12132DCC]">
                    <h2># ${allPost.category}</h2>
                    <h2>Author : ${allPost.author.name}</h2>
                </div>
                <div class="text-xl text-[#12132D] font-bold">
-                   <p>${allPost.title }</p>
+                   <p>${allPost.title}</p>
                </div>
                <div class="text-[#12132D99]">
                    <p>${allPost.description}</p>
@@ -38,7 +40,7 @@ const allPostContainer = document.getElementById('all-posts-Container')
                        <P>${allPost.posted_time}</P>
                    </div>
                </div>
-               <div>
+               <div onclick="handleMesage('${allPost.title.replace("'", " ")}',${allPost.view_count})">
                    <img src="images/messseag 2.png" alt="">
                </div>
            </div>
@@ -47,8 +49,66 @@ const allPostContainer = document.getElementById('all-posts-Container')
     
      </div>
     `
-    allPostContainer.appendChild(newDiv)
-    })    
- }
+        allPostContainer.appendChild(newDiv)
+        // handleIndicator(allPost.isActive)
+    })
+}
+
+// message button click function 
+let count = 0 ;
+function handleMesage(title,countView){
+    count = count + 1 ;
+    const countcontent = document.getElementById('count-content')
+    countcontent.innerText =  count ;
+    // console.log(title,countView)
+    const messageButtonContent = document.getElementById('message-button-container')
+    const newdiv = document.createElement('div')
+    newdiv.innerHTML = `
+    <div class="flex p-3 lg:space-x-11 bg-white rounded-lg  items-center">
+                        <p class="font-semibold text-[#12132D] lg:text-xl">${title}
+                        </p>
+                        <p class="text-[#12132D99]">${countView}</p>
+                    </div>
+    `
+    messageButtonContent.appendChild(newdiv)
+}
+
+// handle indicator 
+// const handleIndicator = (isActive) => {
+//     console.log(isActive,'up')
+    
+//     const indicatorContent = document.getElementById('indicator-up') 
+//     // console.log(indicatorContent)
+//     if(isActive){
+//         indicatorContent.classList.add('bg-red-700')
+//     }
+// }
+
+const loadData2 = async() => {
+    const res = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts')
+    const data = await res.json()
+    const leatesData = data
+    // console.log(leatesData)
+    const leatesDataContainer = document.getElementById('leates-post-container')
+    leatesData.forEach((data) => {
+        console.log(data)
+        const newdiv3 = document.createElement('div')
+        newdiv3.innerHTML = `
+        <div class="card lg:w-96 bg-base-100 shadow-xl">
+         <figure><img src="${data.cover_image }" alt="Shoes" /></figure>
+            <div class="card-body">
+                <p>${data.author.posted_date}</p>
+                <h2 class="card-title">Shoes!</h2>
+                <p>If a dog chews shoes whose shoes does he choose?</p>
+                <div class="card-actions justify-start">
+                    <button class="btn btn-primary">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        `
+        leatesDataContainer.appendChild(newdiv3)
+    })
+}
 
 loadData()
+loadData2()
