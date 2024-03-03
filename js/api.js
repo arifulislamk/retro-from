@@ -55,11 +55,11 @@ function displayAllpost(allPost) {
 }
 
 // message button click function 
-let count = 0 ;
-function handleMesage(title,countView){
-    count = count + 1 ;
+let count = 0;
+function handleMesage(title, countView) {
+    count = count + 1;
     const countcontent = document.getElementById('count-content')
-    countcontent.innerText =  count ;
+    countcontent.innerText = count;
     // console.log(title,countView)
     const messageButtonContent = document.getElementById('message-button-container')
     const newdiv = document.createElement('div')
@@ -76,7 +76,7 @@ function handleMesage(title,countView){
 // handle indicator 
 // const handleIndicator = (isActive) => {
 //     console.log(isActive,'up')
-    
+
 //     const indicatorContent = document.getElementById('indicator-up') 
 //     // console.log(indicatorContent)
 //     if(isActive){
@@ -84,7 +84,7 @@ function handleMesage(title,countView){
 //     }
 // }
 
-const loadData2 = async() => {
+const loadData2 = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts')
     const data = await res.json()
     const leatesData = data
@@ -94,14 +94,19 @@ const loadData2 = async() => {
         console.log(data)
         const newdiv3 = document.createElement('div')
         newdiv3.innerHTML = `
-        <div class="card lg:w-96 bg-base-100 shadow-xl">
-         <figure><img src="${data.cover_image }" alt="Shoes" /></figure>
+        <div class="card lg:w-96 lg:h-full bg-base-100 shadow-xl">
+         <figure><img src="${data.cover_image}" alt="Shoes" /></figure>
             <div class="card-body">
-                <p>${data.author.posted_date}</p>
-                <h2 class="card-title">Shoes!</h2>
-                <p>If a dog chews shoes whose shoes does he choose?</p>
-                <div class="card-actions justify-start">
-                    <button class="btn btn-primary">Buy Now</button>
+                <div class="flex gap-2"><img src="images/Frame.png" alt="Shoes" />
+                <p>${data.author.posted_date}</p></div>
+                <h2 class="text-[18px] font-bold">${data.title}</h2>
+                <p>${data.description}</p>
+                <div class="flex gap-3 items-center">
+                    <img class="w-1/4 border-2 border-blue-400 rounded-full" src="${data.profile_image}" />
+                    <div >
+                         <h2 class="font-bold">${data.author.name}</h2>
+                        <p>${data.author.designation}</p>
+                    </div>
                 </div>
             </div>
         </div>
