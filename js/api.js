@@ -68,28 +68,17 @@ function handleMesage(title, countView) {
     const messageButtonContent = document.getElementById('message-button-container')
     const newdiv = document.createElement('div')
     newdiv.innerHTML = `
-    <div class="flex p-3 lg:space-x-11 bg-white rounded-lg border-gray-400 border-2  items-center">
-                        <p class="font-semibold text-[#12132D] lg:text-xl">${title}
+    <div class="flex p-2 bg-white rounded-lg border-gray-400 border-2  items-center">
+                        <p class="font-semibold text-[#12132D] lg:text-[18px]">${title}
                         </p>
+                        <div class="flex items-center"><img class="lg:w-1/4" src="images/eye.png" alt="">
                         <p class="text-[#12132D99]">${countView}</p>
+                       </div>
                     </div>
     `
     messageButtonContent.appendChild(newdiv)
 }
 
-// handle indicator 
-// const handleIndicator = (isActive) => {
-//     console.log(isActive,'up')
-
-//     const indicatorContent = document.getElementById('indicator-up') 
-//     // console.log(indicatorContent)
-//     if(isActive === false){
-//         indicatorContent.classList.add('bg-green-700')
-//     }
-//     else{
-//         indicatorContent.classList.add('bg-green-700')
-//     }
-// }
 
 const loadData2 = async () => {
     const res = await fetch('https://openapi.programming-hero.com/api/retro-forum/latest-posts')
