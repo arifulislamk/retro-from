@@ -12,47 +12,49 @@ function displayAllpost(allPost) {
     allPost.forEach((allPost) => {
         const newDiv = document.createElement('div')
         newDiv.innerHTML = `
-    <div class="lg:flex lg:justify-around p-2 lg:p-10 bg-[#797DFC1A] rounded-lg">
-       <div class="w-1/2 lg:w-1/4 indicator"> <span id="indicator-up"  class="indicator-item badge ${allPost.isActive ? 'bg-green-700' : 'bg-red-700'}"></span> 
-        <img class="" src="${allPost.image}" alt="">
+        <div class="lg:flex lg:justify-around p-2 lg:p-10 bg-[#797DFC1A] border-2 border-gray-400 rounded-lg">
+           <div class="w-1/2 lg:w-1/4 indicator"> <span id="indicator-up"  class="indicator-item badge ${allPost.isActive ? 'bg-green-700' : 'bg-red-700'}"></span> 
+              <img class="rounded-2xl" src="${allPost.image}" alt="">
+            </div>
+
+           <div class="lg:w-2/3">
+               <div class="space-y-3">
+                   <div class="flex gap-7 text-[#12132DCC]">
+                       <h2># ${allPost.category}</h2>
+                       <h2>Author : ${allPost.author.name}</h2>
+                   </div>
+                   <div class="text-xl text-[#12132D] font-bold">
+                       <p>${allPost.title}</p>
+                   </div>
+                   <div class="text-[#12132D99]">
+                       <p>${allPost.description}</p>
+                   </div>
+               </div>
+               <div class="flex items-center justify-between mt-8">
+                   <div class=" flex space-x-5 lg:space-x-10 text-[#12132D99]">
+                       <div class="flex items-center gap-2 lg:gap-5"><img src="images/message.png" alt="">
+                           <P>${allPost.comment_count}</P>
+                       </div>
+                       <div class="flex items-center gap-2 lg:gap-5"><img src="images/eye.png" alt="">
+                           <P>${allPost.view_count}</P>
+                       </div>
+                       <div class="flex items-center gap-2 lg:gap-5"><img src="images/clock.png" alt="">
+                           <P>${allPost.posted_time}</P>
+                       </div>
+                   </div>
+                   <div onclick="handleMesage('${allPost.title.replace("'", " ")}',${allPost.view_count})">
+                       <img src="images/messseag 2.png" alt="">
+                   </div>
+               </div>
+        
+            </div>
+        
         </div>
-       <div class="lg:w-2/3">
-           <div class="space-y-3">
-               <div class="flex gap-7 text-[#12132DCC]">
-                   <h2># ${allPost.category}</h2>
-                   <h2>Author : ${allPost.author.name}</h2>
-               </div>
-               <div class="text-xl text-[#12132D] font-bold">
-                   <p>${allPost.title}</p>
-               </div>
-               <div class="text-[#12132D99]">
-                   <p>${allPost.description}</p>
-               </div>
-           </div>
-           <div class="flex items-center justify-between mt-8">
-               <div class=" flex space-x-5 lg:space-x-10 text-[#12132D99]">
-                   <div class="flex items-center gap-2 lg:gap-5"><img src="images/message.png" alt="">
-                       <P>${allPost.comment_count}</P>
-                   </div>
-                   <div class="flex items-center gap-2 lg:gap-5"><img src="images/eye.png" alt="">
-                       <P>${allPost.view_count}</P>
-                   </div>
-                   <div class="flex items-center gap-2 lg:gap-5"><img src="images/clock.png" alt="">
-                       <P>${allPost.posted_time}</P>
-                   </div>
-               </div>
-               <div onclick="handleMesage('${allPost.title.replace("'", " ")}',${allPost.view_count})">
-                   <img src="images/messseag 2.png" alt="">
-               </div>
-           </div>
-    
-        </div>
-    
-     </div>
-    `
+        `
         allPostContainer.appendChild(newDiv)
         // console.log(allPost.isActive);
         // handleIndicator(allPost.isActive)
+        loading.classList.add('hidden')
     })
 }
 
@@ -66,7 +68,7 @@ function handleMesage(title, countView) {
     const messageButtonContent = document.getElementById('message-button-container')
     const newdiv = document.createElement('div')
     newdiv.innerHTML = `
-    <div class="flex p-3 lg:space-x-11 bg-white rounded-lg  items-center">
+    <div class="flex p-3 lg:space-x-11 bg-white rounded-lg border-gray-400 border-2  items-center">
                         <p class="font-semibold text-[#12132D] lg:text-xl">${title}
                         </p>
                         <p class="text-[#12132D99]">${countView}</p>
@@ -124,7 +126,18 @@ const loadData3 = async (searchId) => {
     console.log(searchId);
     const res = await fetch(`https://openapi.programming-hero.com/api/retro-forum/posts?category=${searchId}`)
     const data = await res.json()
-    const searchPostData = data.posts
+    const searchPostData = data.posts 
+    const notFoundContainer = document.getElementById('not-found-data')
+    const messageButtonContent = document.getElementById('message-button-container')
+    if (searchPostData.length < 1){
+        loading.classList.add('hidden')
+        notFoundContainer.classList.remove('hidden')
+        messageButtonContent.classList.add('hidden')
+    }
+    else{
+        notFoundContainer.classList.add('hidden')
+        messageButtonContent.classList.remove('hidden')
+    }
     display2(searchPostData)
 }
 function display2(searchData) {
@@ -172,13 +185,22 @@ function display2(searchData) {
      </div>
     `
     allPostContainer.appendChild(newDiv)
+    loading.classList.add('hidden')
     })
 }
 // handle search button 
+const loading = document.getElementById('load-content')
 const searchButtonHandle = () => {
+    loading.classList.remove('hidden')
     const inputContainer = document.getElementById('input-content')
     const inputText = inputContainer.value;
-    loadData3(inputText)
+    if(inputText.length > 0){
+        loadData3(inputText)
+    }
+    else{
+        loading.classList.add('hidden')
+    }
+    
 }
 loadData()
 loadData2()
